@@ -1,0 +1,22 @@
+# Core dependencies for MVP
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-anthropic>=0.2.0
+anthropic>=0.40.0
+
+# Data handling
+pandas>=2.0.0
+pydantic>=2.0.0
+
+# CLI interface
+rich>=13.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Async support
+aiohttp>=3.9.0
+
+# Testing (for later)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0

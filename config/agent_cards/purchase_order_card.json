@@ -1,0 +1,32 @@
+{
+  "agent_id": "purchase_order",
+  "name": "Purchase Order Agent",
+  "description": "Generates and validates purchase order documents with tax calculations",
+  "version": "1.0.0",
+  "capabilities": ["generate_purchase_order", "validate_po", "save_po_document"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "supplier_recommendations": {
+        "type": "array",
+        "description": "Approved supplier selections with items and pricing"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "purchase_orders": {
+        "type": "array",
+        "description": "Generated PO documents with line items and totals"
+      },
+      "saved_files": {
+        "type": "array",
+        "description": "File paths where POs were saved"
+      }
+    }
+  },
+  "protocol": "a2a",
+  "endpoint": "purchase_order",
+  "sub_agents": ["po_validator"]
+}

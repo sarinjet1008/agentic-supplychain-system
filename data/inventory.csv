@@ -1,0 +1,6 @@
+item_id,name,category,current_stock,reorder_point,unit_cost
+101,Laptop,Electronics,5,10,750.00
+102,Monitor,Electronics,12,10,200.00
+103,Keyboard,Electronics,8,15,45.00
+104,Mouse,Electronics,50,20,15.00
+105,Headset,Electronics,100,50,60.00

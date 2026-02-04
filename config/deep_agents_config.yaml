@@ -1,0 +1,309 @@
+# Deep Agents SDK Configuration
+# Configuration for Deep Agents integration in the PO Assistant
+
+# =========================================================
+# Model Configuration
+# =========================================================
+model:
+  # Primary model for agent operations
+  primary:
+    provider: "anthropic"
+    model_id: "claude-3-5-sonnet-20241022"
+    max_tokens: 4096
+    temperature: 0.1  # Low temperature for consistent behavior
+
+  # Fallback model for simpler tasks
+  fallback:
+    provider: "anthropic"
+    model_id: "claude-3-haiku-20240307"
+    max_tokens: 2048
+    temperature: 0.0
+
+# =========================================================
+# Tool Configuration
+# =========================================================
+tools:
+  # Planning Tools
+  planning:
+    enabled: true
+    write_todos:
+      max_tasks: 20
+      auto_breakdown: true
+      track_progress: true
+
+  # File Tools
+  file_system:
+    enabled: true
+    allowed_operations:
+      - read
+      - write
+      - list
+      - search
+    sandboxed: true
+    allowed_paths:
+      - "data/"
+      - "data/outputs/"
+      - "config/"
+    blocked_paths:
+      - ".env"
+      - "*.key"
+      - "secrets/"
+    max_file_size_mb: 10
+
+  # Sub-Agent Spawning
+  subagent:
+    enabled: true
+    max_concurrent: 3
+    timeout_seconds: 300
+    allowed_types:
+      - validator
+      - calculator
+      - analyzer
+
+  # Custom Business Tools
+  custom:
+    calculation:
+      enabled: true
+      module: "tools.custom_tools.calculation_tools"
+      functions:
+        - calculate_tax
+        - calculate_po_totals
+        - calculate_reorder_quantity
+        - calculate_bulk_discount
+
+    comparison:
+      enabled: true
+      module: "tools.custom_tools.comparison_tools"
+      functions:
+        - compare_suppliers
+        - find_best_value
+        - score_supplier
+
+    validation:
+      enabled: true
+      module: "tools.custom_tools.validation_tools"
+      functions:
+        - validate_purchase_order
+        - validate_inventory_item
+        - quick_validate
+
+# =========================================================
+# Agent Configuration
+# =========================================================
+agents:
+  # Orchestrator Agent
+  orchestrator:
+    name: "PO Orchestrator"
+    description: "Coordinates the PO workflow and manages other agents"
+    capabilities:
+      - planning
+      - coordination
+      - user_interaction
+    tools:
+      - planning.write_todos
+      - subagent.spawn
+    max_iterations: 10
+
+  # Inventory Monitor Agent
+  inventory_monitor:
+    name: "Inventory Monitor"
+    description: "Monitors inventory levels and identifies reorder needs"
+    capabilities:
+      - inventory_check
+      - reorder_calculation
+    tools:
+      - file_system.read
+      - custom.calculation
+    max_iterations: 5
+
+  # Supplier Selector Agent
+  supplier_selector:
+    name: "Supplier Selector"
+    description: "Evaluates suppliers and recommends best options"
+    capabilities:
+      - supplier_query
+      - price_comparison
+      - recommendation
+    tools:
+      - file_system.read
+      - custom.comparison
+    max_iterations: 5
+
+  # Purchase Order Agent
+  purchase_order:
+    name: "Purchase Order Generator"
+    description: "Creates and validates purchase orders"
+    capabilities:
+      - po_generation
+      - po_validation
+      - file_save
+    tools:
+      - file_system.write
+      - custom.calculation
+      - custom.validation
+      - subagent.spawn
+    max_iterations: 5
+
+  # Validator Sub-Agent
+  validator:
+    name: "PO Validator"
+    description: "Validates purchase orders against business rules"
+    capabilities:
+      - validation
+    tools:
+      - custom.validation
+    max_iterations: 3
+    is_subagent: true
+
+# =========================================================
+# Memory Configuration
+# =========================================================
+memory:
+  # Conversation memory
+  conversation:
+    enabled: true
+    max_messages: 100
+    persist_to_disk: true
+    storage_path: "data/conversations/"
+
+  # Working memory (current session)
+  working:
+    enabled: true
+    max_items: 50
+
+  # Long-term memory (persistent knowledge)
+  long_term:
+    enabled: false  # Disabled for MVP
+    storage_type: "sqlite"
+    database_path: "data/memory.db"
+
+# =========================================================
+# HITL (Human-in-the-Loop) Configuration
+# =========================================================
+hitl:
+  enabled: true
+
+  gates:
+    # Gate 1: PO Creation Approval
+    po_creation:
+      enabled: true
+      trigger: "before_po_creation"
+      description: "Approve creating purchase orders for low stock items"
+      timeout_seconds: 300
+      default_action: "wait"
+
+    # Gate 2: Supplier Selection
+    supplier_selection:
+      enabled: true
+      trigger: "after_supplier_comparison"
+      description: "Choose from recommended suppliers"
+      timeout_seconds: 300
+      default_action: "use_recommendation"
+      options:
+        allow_override: true
+        show_all_options: true
+
+    # Gate 3: High-Value PO Approval
+    high_value_approval:
+      enabled: true
+      trigger: "po_value_exceeds_threshold"
+      threshold: 10000.00
+      description: "Approve high-value purchase orders"
+      timeout_seconds: 600
+      default_action: "wait"
+      require_reason: true
+
+    # Gate 4: Threshold Adjustment
+    threshold_adjustment:
+      enabled: true
+      trigger: "reorder_point_change"
+      description: "Approve changes to reorder thresholds"
+      timeout_seconds: 300
+      default_action: "reject"
+
+    # Gate 5: Exception Handling
+    exception_handling:
+      enabled: true
+      trigger: "on_exception"
+      description: "Handle unexpected situations"
+      timeout_seconds: 300
+      default_action: "wait"
+      exceptions:
+        - supplier_not_found
+        - insufficient_budget
+        - validation_failure
+        - external_api_error
+
+# =========================================================
+# Logging Configuration
+# =========================================================
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+
+    file:
+      enabled: true
+      level: "DEBUG"
+      path: "logs/deep_agents.log"
+      max_size_mb: 10
+      backup_count: 5
+
+  # Log specific components
+  components:
+    planning: "DEBUG"
+    file_tools: "INFO"
+    subagent: "DEBUG"
+    validation: "INFO"
+
+# =========================================================
+# Performance Configuration
+# =========================================================
+performance:
+  # Rate limiting
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+    burst_limit: 10
+
+  # Caching
+  cache:
+    enabled: true
+    ttl_seconds: 300
+    max_size_mb: 100
+
+  # Timeouts
+  timeouts:
+    api_call: 30
+    file_operation: 10
+    subagent_spawn: 300
+    hitl_response: 600
+
+# =========================================================
+# Security Configuration
+# =========================================================
+security:
+  # Sandbox mode for file operations
+  sandbox:
+    enabled: true
+    root_directory: "."
+
+  # Input validation
+  input_validation:
+    enabled: true
+    max_input_length: 10000
+    sanitize_paths: true
+
+  # Output filtering
+  output_filtering:
+    enabled: true
+    redact_sensitive: true
+    sensitive_patterns:
+      - "api_key"
+      - "password"
+      - "secret"
+      - "token"

@@ -1,0 +1,121 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP001",
+      "name": "TechWorld Distributors",
+      "contact": "sales@techworld.com",
+      "phone": "+1-555-0100",
+      "rating": 4.5,
+      "catalog": {
+        "101": {
+          "product_name": "Laptop",
+          "unit_price": 850.00,
+          "lead_time_days": 5,
+          "min_order_quantity": 1
+        },
+        "102": {
+          "product_name": "Monitor",
+          "unit_price": 275.00,
+          "lead_time_days": 3,
+          "min_order_quantity": 1
+        },
+        "103": {
+          "product_name": "Keyboard",
+          "unit_price": 45.00,
+          "lead_time_days": 2,
+          "min_order_quantity": 5
+        },
+        "104": {
+          "product_name": "Mouse",
+          "unit_price": 22.00,
+          "lead_time_days": 2,
+          "min_order_quantity": 5
+        },
+        "105": {
+          "product_name": "Headset",
+          "unit_price": 65.00,
+          "lead_time_days": 3,
+          "min_order_quantity": 1
+        }
+      }
+    },
+    {
+      "id": "SUP002",
+      "name": "Global Electronics Supply",
+      "contact": "orders@globales.com",
+      "phone": "+1-555-0200",
+      "rating": 4.2,
+      "catalog": {
+        "101": {
+          "product_name": "Laptop",
+          "unit_price": 820.00,
+          "lead_time_days": 7,
+          "min_order_quantity": 1
+        },
+        "102": {
+          "product_name": "Monitor",
+          "unit_price": 290.00,
+          "lead_time_days": 5,
+          "min_order_quantity": 1
+        },
+        "103": {
+          "product_name": "Keyboard",
+          "unit_price": 42.00,
+          "lead_time_days": 4,
+          "min_order_quantity": 10
+        },
+        "104": {
+          "product_name": "Mouse",
+          "unit_price": 20.00,
+          "lead_time_days": 4,
+          "min_order_quantity": 10
+        },
+        "105": {
+          "product_name": "Headset",
+          "unit_price": 60.00,
+          "lead_time_days": 5,
+          "min_order_quantity": 1
+        }
+      }
+    },
+    {
+      "id": "SUP003",
+      "name": "Premium Office Supplies",
+      "contact": "sales@premiumoffice.com",
+      "phone": "+1-555-0300",
+      "rating": 4.8,
+      "catalog": {
+        "101": {
+          "product_name": "Laptop",
+          "unit_price": 880.00,
+          "lead_time_days": 3,
+          "min_order_quantity": 1
+        },
+        "102": {
+          "product_name": "Monitor",
+          "unit_price": 285.00,
+          "lead_time_days": 2,
+          "min_order_quantity": 1
+        },
+        "103": {
+          "product_name": "Keyboard",
+          "unit_price": 48.00,
+          "lead_time_days": 1,
+          "min_order_quantity": 1
+        },
+        "104": {
+          "product_name": "Mouse",
+          "unit_price": 25.00,
+          "lead_time_days": 1,
+          "min_order_quantity": 1
+        },
+        "105": {
+          "product_name": "Headset",
+          "unit_price": 70.00,
+          "lead_time_days": 2,
+          "min_order_quantity": 1
+        }
+      }
+    }
+  ]
+}

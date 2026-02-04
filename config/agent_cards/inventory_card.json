@@ -1,0 +1,31 @@
+{
+  "agent_id": "inventory_monitor",
+  "name": "Inventory Monitor Agent",
+  "description": "Monitors inventory levels and identifies items needing reorder",
+  "version": "1.0.0",
+  "capabilities": ["check_inventory", "calculate_reorder_quantities"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "check_all": {
+        "type": "boolean",
+        "description": "Whether to check all items or only low stock items"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "low_stock_items": {
+        "type": "array",
+        "description": "List of items below reorder point"
+      },
+      "reorder_recommendations": {
+        "type": "array",
+        "description": "Calculated reorder quantities for each item"
+      }
+    }
+  },
+  "protocol": "a2a",
+  "endpoint": "inventory_monitor"
+}

@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "description": "MCP Server Configuration for PO Assistant",
+  "servers": {
+    "filesystem_mcp": {
+      "enabled": true,
+      "name": "Filesystem MCP Server",
+      "type": "filesystem",
+      "settings": {
+        "base_path": "data",
+        "output_path": "data/outputs",
+        "allowed_extensions": [".csv", ".json", ".txt"],
+        "max_file_size_bytes": 10485760
+      },
+      "tools": {
+        "read_csv": {
+          "enabled": true,
+          "timeout_ms": 5000
+        },
+        "write_po_document": {
+          "enabled": true,
+          "timeout_ms": 10000
+        },
+        "list_inventory_files": {
+          "enabled": true,
+          "timeout_ms": 3000
+        },
+        "read_json": {
+          "enabled": true,
+          "timeout_ms": 5000
+        },
+        "write_json": {
+          "enabled": true,
+          "timeout_ms": 10000
+        }
+      }
+    },
+    "api_mcp": {
+      "enabled": true,
+      "name": "API MCP Server",
+      "type": "api",
+      "settings": {
+        "suppliers_file": "data/suppliers.json",
+        "min_delay_ms": 300,
+        "max_delay_ms": 2000,
+        "error_rate_percent": 2,
+        "price_variation_percent": 10
+      },
+      "tools": {
+        "get_supplier_quote": {
+          "enabled": true,
+          "timeout_ms": 10000
+        },
+        "get_quotes_batch": {
+          "enabled": true,
+          "timeout_ms": 30000
+        },
+        "check_supplier_availability": {
+          "enabled": true,
+          "timeout_ms": 5000
+        },
+        "list_suppliers": {
+          "enabled": true,
+          "timeout_ms": 3000
+        }
+      }
+    },
+    "database_mcp": {
+      "enabled": true,
+      "name": "Database MCP Server",
+      "type": "database",
+      "settings": {
+        "db_path": "data/inventory.db",
+        "connection_pool_size": 5,
+        "query_timeout_ms": 30000,
+        "create_tables_on_startup": true
+      },
+      "tools": {
+        "query_inventory": {
+          "enabled": true,
+          "timeout_ms": 10000,
+          "max_results": 1000
+        },
+        "update_stock": {
+          "enabled": true,
+          "timeout_ms": 5000,
+          "require_reason": true
+        },
+        "get_inventory_summary": {
+          "enabled": true,
+          "timeout_ms": 5000
+        },
+        "record_po_transaction": {
+          "enabled": true,
+          "timeout_ms": 10000
+        },
+        "get_transaction_history": {
+          "enabled": true,
+          "timeout_ms": 10000,
+          "max_results": 500
+        }
+      }
+    }
+  },
+  "global_settings": {
+    "default_timeout_ms": 30000,
+    "health_check_interval_seconds": 60,
+    "retry_on_failure": true,
+    "max_retries": 3,
+    "logging": {
+      "level": "INFO",
+      "log_tool_calls": true,
+      "log_tool_results": false
+    }
+  },
+  "security": {
+    "sandbox_mode": true,
+    "allowed_paths": [
+      "data",
+      "config"
+    ],
+    "denied_paths": [
+      ".env",
+      "credentials",
+      "secrets"
+    ]
+  }
+}

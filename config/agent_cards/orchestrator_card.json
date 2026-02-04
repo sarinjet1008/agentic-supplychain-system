@@ -1,0 +1,57 @@
+{
+  "agent_id": "orchestrator",
+  "name": "Orchestrator Agent",
+  "description": "Coordinates workflow and handles user interaction for the PO Assistant",
+  "version": "1.0.0",
+  "capabilities": [
+    "parse_user_input",
+    "coordinate_workflow",
+    "generate_response",
+    "process_message"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "user_message": {
+        "type": "string",
+        "description": "User's input message"
+      },
+      "conversation_history": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {"type": "string"},
+            "content": {"type": "string"}
+          }
+        },
+        "description": "Previous conversation messages"
+      },
+      "workflow_state": {
+        "type": "object",
+        "description": "Current workflow state"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "agent_response": {
+        "type": "string",
+        "description": "Response message for the user"
+      },
+      "workflow_stage": {
+        "type": "string",
+        "description": "Current workflow stage"
+      },
+      "pending_action": {
+        "type": "string",
+        "description": "Action waiting for user approval"
+      }
+    }
+  },
+  "metadata": {
+    "role": "coordinator",
+    "coordinates": ["inventory_monitor", "supplier_selector", "purchase_order"]
+  }
+}

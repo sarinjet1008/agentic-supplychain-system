@@ -1,0 +1,31 @@
+{
+  "agent_id": "supplier_selector",
+  "name": "Supplier Selector Agent",
+  "description": "Queries suppliers and recommends best options based on price, lead time, and reliability",
+  "version": "1.0.0",
+  "capabilities": ["select_supplier", "compare_quotes", "get_supplier_recommendations"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "reorder_recommendations": {
+        "type": "array",
+        "description": "List of items needing reorder with quantities"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "supplier_recommendations": {
+        "type": "array",
+        "description": "Recommended suppliers for each item with pricing and lead time"
+      },
+      "total_cost": {
+        "type": "number",
+        "description": "Total estimated cost across all suppliers"
+      }
+    }
+  },
+  "protocol": "a2a",
+  "endpoint": "supplier_selector"
+}
